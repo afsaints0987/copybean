@@ -43,52 +43,13 @@ const generateSEO = async (req, res) => {
     }
 }
 
-const extractKeywords = async (req, res) => {
-    const { prompt } = req.body 
-
-    try {
-        const response = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: `Extract keywords from this text: \n\n${prompt}`,
-            temperature: 0.5,
-            max_tokens: 60,
-            top_p: 1.0,
-            frequency_penalty: 0.8,
-            presence_penalty: 0.0,
-        });
-
-        const keywords = response.data.choices
-
-        res.status(200).json({
-            prompt,
-            success: true,
-            data: keywords,
-            message: 'Extract Successful!'
-        })
-
-    } catch(error) {
-        if (error.response) {
-            console.log(error.response.status);
-            console.log(error.response.data);
-          } else {
-            console.log(error.message);
-          }
-  
-          res.status(400).json({
-            success: false,
-            error: "Extract Failed",
-            message: error.message
-          });
-    }
-}
-
 const createAds = async (req, res) => {
     const { prompt } = req.body
 
     try {
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `Create a facebook ads for ${prompt} a ${prompt}`,
+            prompt: `Write a creative facebook ad for ${prompt} a ${prompt}`,
             temperature: 0.8,
             max_tokens: 256,
             top_p: 1.0,
@@ -197,10 +158,48 @@ const createBlog = async (req, res) => {
     }
 }
 
+const createEmail = async (req, res) => {
+    const { prompt } = req.body
+
+    try {
+        const response = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: `Write a ${prompt} email about ${prompt} with my email address ${prompt}`,
+            temperature: 0.7,
+            max_tokens: 512,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0
+        });
+
+        const email = response.data.choices
+
+        res.status(200).json({
+            prompt,
+            success: true,
+            data: email,
+            message: "Email Created"
+        })
+    } catch(error) {
+        if (error.response) {
+          console.log(error.response.status);
+          console.log(error.response.data);
+        } else {
+          console.log(error.message);
+        }
+
+        res.status(400).json({
+          success: false,
+          error: "Email Creation Failed",
+          message: error.message
+        });
+    }
+}
+
 module.exports = {
     generateSEO,
-    extractKeywords,
     createAds,
     createTagline,
-    createBlog
+    createBlog,
+    createEmail
 }
