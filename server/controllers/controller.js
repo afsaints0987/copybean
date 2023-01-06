@@ -37,7 +37,7 @@ const generateSEO = async (req, res) => {
   
           res.status(400).json({
             success: false,
-            error: "Generate Tagline Failed",
+            error: "Generate SEO Failed",
             message: error.message
           });
     }
